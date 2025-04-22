@@ -1,0 +1,6 @@
+IND_UUID,IND_NAME,DIM_GEO_CODE_TYPE,DIM_GEO_CODE_M49,GEO_NAME_SHORT,DIM_TIME_TYPE,DIM_TIME,RATE_PER_10000_N
+5C8435F,Density of nurses and midwives,COUNTRY,052,Barbados,YEAR,2005,48.646
+5C8435F,Density of nurses and midwives,COUNTRY,052,Barbados,YEAR,1995,51.849
+5C8435F,Density of nurses and midwives,COUNTRY,052,Barbados,YEAR,2000,59.766
+5C8435F,Density of nurses and midwives,COUNTRY,052,Barbados,YEAR,2001,59.533
+5C8435F,Density of nurses and midwives,COUNTRY,052,Barbados,YEAR,2018,31.355

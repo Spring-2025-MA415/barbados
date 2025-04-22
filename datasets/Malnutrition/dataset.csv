@@ -1,0 +1,8 @@
+IND_UUID,IND_NAME,DIM_GEO_CODE_TYPE,DIM_GEO_CODE_M49,GEO_NAME_SHORT,DIM_TIME_TYPE,DIM_TIME,RATE_PER_100_N,RATE_PER_100_NL,RATE_PER_100_NU
+FC5231F,Wasting in children (under 5),COUNTRY,052,Barbados,YEAR,2012,6.8,4.5,10
+FC5231F,Wasting in children (under 5),COUNTRY,052,Barbados,YEAR,2012,21.1,12,34.4
+FC5231F,Wasting in children (under 5),COUNTRY,052,Barbados,YEAR,2012,13,8.1,20.2
+FC5231F,Wasting in children (under 5),COUNTRY,052,Barbados,YEAR,2012,13.4,5.1,30.6
+FC5231F,Wasting in children (under 5),COUNTRY,052,Barbados,YEAR,2012,4.4,1,17.2
+FC5231F,Wasting in children (under 5),COUNTRY,052,Barbados,YEAR,2012,4.8,1.7,13
+FC5231F,Wasting in children (under 5),COUNTRY,052,Barbados,YEAR,2012,3.6,2,6.4

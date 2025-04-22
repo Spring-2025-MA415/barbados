@@ -1,0 +1,27 @@
+IND_UUID,IND_NAME,DIM_GEO_CODE_TYPE,DIM_GEO_CODE_M49,GEO_NAME_SHORT,DIM_TIME_TYPE,DIM_TIME,Degree of urbanization,RATE_N,RATE_NL,RATE_NU
+F810947,Mean particulates (PM2.5) in urban areas,COUNTRY,052,Barbados,YEAR,2012,Cities,9.62797,7.01959,14.33156
+F810947,Mean particulates (PM2.5) in urban areas,COUNTRY,052,Barbados,YEAR,2013,Cities,9.34653,6.36323,13.59104
+F810947,Mean particulates (PM2.5) in urban areas,COUNTRY,052,Barbados,YEAR,2016,Cities,10.38318,7.0153,15.40064
+F810947,Mean particulates (PM2.5) in urban areas,COUNTRY,052,Barbados,YEAR,2011,Cities,9.07184,6.2157,13.3009
+F810947,Mean particulates (PM2.5) in urban areas,COUNTRY,052,Barbados,YEAR,2018,Cities,10.39217,7.17349,14.89756
+F810947,Mean particulates (PM2.5) in urban areas,COUNTRY,052,Barbados,YEAR,2010,Cities,9.17666,6.13144,13.64415
+F810947,Mean particulates (PM2.5) in urban areas,COUNTRY,052,Barbados,YEAR,2014,Cities,9.98636,6.70597,14.25894
+F810947,Mean particulates (PM2.5) in urban areas,COUNTRY,052,Barbados,YEAR,2015,Cities,10.56466,7.17471,16.06313
+F810947,Mean particulates (PM2.5) in urban areas,COUNTRY,052,Barbados,YEAR,2017,Cities,10.9494,7.7322,15.98124
+F810947,Mean particulates (PM2.5) in urban areas,COUNTRY,052,Barbados,YEAR,2019,Cities,9.82861,6.94552,14.08931
+F810947,Mean particulates (PM2.5) in urban areas,COUNTRY,052,Barbados,YEAR,2011,Rural,8.52876,5.77332,12.921569999999999
+F810947,Mean particulates (PM2.5) in urban areas,COUNTRY,052,Barbados,YEAR,2012,Rural,9.0557,6.48446,13.88197
+F810947,Mean particulates (PM2.5) in urban areas,COUNTRY,052,Barbados,YEAR,2019,Rural,9.18889,6.51015,13.28212
+F810947,Mean particulates (PM2.5) in urban areas,COUNTRY,052,Barbados,YEAR,2010,Rural,8.62187,5.68154,13.0349
+F810947,Mean particulates (PM2.5) in urban areas,COUNTRY,052,Barbados,YEAR,2014,Rural,9.35918,6.21223,13.36622
+F810947,Mean particulates (PM2.5) in urban areas,COUNTRY,052,Barbados,YEAR,2013,Rural,8.77353,6.04041,13.17614
+F810947,Mean particulates (PM2.5) in urban areas,COUNTRY,052,Barbados,YEAR,2015,Rural,9.90193,6.67151,15.49036
+F810947,Mean particulates (PM2.5) in urban areas,COUNTRY,052,Barbados,YEAR,2017,Rural,10.24462,7.3943,14.98279
+F810947,Mean particulates (PM2.5) in urban areas,COUNTRY,052,Barbados,YEAR,2016,Rural,9.72924,6.5634,15.14592
+F810947,Mean particulates (PM2.5) in urban areas,COUNTRY,052,Barbados,YEAR,2018,Rural,9.73151,6.48994,13.71478
+F810947,Mean particulates (PM2.5) in urban areas,COUNTRY,052,Barbados,YEAR,2011,Total,9.04454,6.23135,13.28705
+F810947,Mean particulates (PM2.5) in urban areas,COUNTRY,052,Barbados,YEAR,2012,Total,9.60352,6.9312,14.27154
+F810947,Mean particulates (PM2.5) in urban areas,COUNTRY,052,Barbados,YEAR,2014,Total,9.94912,6.70677,14.11165
+F810947,Mean particulates (PM2.5) in urban areas,COUNTRY,052,Barbados,YEAR,2016,Total,10.34492,6.91521,15.38457
+F810947,Mean particulates (PM2.5) in urban areas,COUNTRY,052,Barbados,YEAR,2017,Total,10.90575,7.71586,15.83205
+F810947,Mean particulates (PM2.5) in urban areas,COUNTRY,052,Barbados,YEAR,2018,Total,10.35542,7.14392,14.8283
