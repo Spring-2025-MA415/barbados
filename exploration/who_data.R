@@ -54,13 +54,13 @@ homicide <- read.csv("datasets/Intentional homicide/dataset.csv")
 malnutrition <- read.csv("datasets/Malnutrition/dataset.csv")
 
 # maternal mortality rates
-maternal <- read.csv('./data/Maternal mortality ratio/dataset.csv')
+maternal <- read.csv('./datasets/Maternal mortality ratio/dataset.csv')
 
 # neglected tropical diseases
 trop_diseases <- read.csv("datasets/Neglected tropical diseases/dataset.csv")
 
 # neonatal mortality rates
-infant <- read.csv("./data/Neonatal mortality rate/dataset.csv")
+infant <- read.csv("./datasets/Neonatal mortality rate/dataset.csv")
 
 # nurses and midwives density
 nurse_midwife <- read.csv("datasets/Nurses and midwives density and distribution/dataset.csv")

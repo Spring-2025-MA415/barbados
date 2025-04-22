@@ -19,7 +19,8 @@ ui <- dashboardPage(skin = "purple",
     tabItems(
       # home tabItem
       tabItem(tabName = "home",
-              h2("Exploration of Barbados")
+              h2("Exploration of Barbados"),
+              leafletOutput("map", height = "800px")
               ),
       
       # demographics tabItem
@@ -39,7 +40,27 @@ ui <- dashboardPage(skin = "purple",
 )
 
 
-server <- function(input, output) { }
+server <- function(input, output) {
+  output$map <- renderLeaflet({
+    leaflet(data = barbados) %>%
+      addProviderTiles(providers$CartoDB.Positron) %>%
+      addPolygons(
+        color = "#444444",
+        weight = 1,
+        smoothFactor = 0.5,
+        opacity = 1.0,
+        fillOpacity = 0.7,
+        fillColor = "lightblue",
+        highlightOptions = highlightOptions(
+          color = "white",
+          weight = 2,
+          bringToFront = TRUE
+        ),
+        label = ~paste0("Parish: ", Parish)  # Replace with actual column name
+      )
+  })
+  
+}
 
 
 # Run the application 
