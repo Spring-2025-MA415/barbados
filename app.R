@@ -1,41 +1,46 @@
-#
-# This is a Shiny web application. You can run the application by clicking
-# the 'Run App' button above.
-#
-# Find out more about building applications with Shiny here:
-#
-#    https://shiny.posit.co/
-#
-
 library(shiny)
+library(shinydashboard)
+library(leaflet)
 source("exploration/un_data.R")
+source("exploration/who_data.R")
+source("exploration/mapping.R")
 
-ui <- fluidPage(
-  titlePanel("Population Data Explorer"),
-  
-  sidebarLayout(
-    sidebarPanel(
-      selectInput("ycol", "Choose Y-axis Variable:",
-                  choices = setdiff(names(population), "Year"))
-    ),
-    
-    mainPanel(
-      plotOutput("dataPlot")
+ui <- dashboardPage(skin = "purple",
+  dashboardHeader(title = "Barbados"),
+  dashboardSidebar(
+    sidebarMenu(
+      menuItem("Home", tabName = "home", icon = icon("home")),
+      menuItem("Demographics", tabName = "demographics", icon = icon("person")),
+      menuItem("Health", tabName = "health", icon = icon("heartbeat")),
+      menuItem("Citations", tabName = "citations", icon = icon("info-circle"))
+    )
+  ),
+  dashboardBody(
+    tabItems(
+      # home tabItem
+      tabItem(tabName = "home",
+              h2("Exploration of Barbados")
+              ),
+      
+      # demographics tabItem
+      tabItem(tabName = "demographics"
+              ),
+      
+      # health tabItem
+      tabItem(tabName = "health"
+              ),
+      
+      # citations tabItem
+      tabItem(tabName = "citations"
+              )
+      
     )
   )
 )
 
-server <- function(input, output, session) {
-  output$dataPlot <- renderPlot({
-    plot(
-      population$Year,  # Fixed X-axis (year)
-      population[[input$ycol]],  # Dynamically selected Y-axis
-      type = "b", col = "darkblue", pch = 16,
-      xlab = "Year", ylab = input$ycol,
-      main = paste(input$ycol, "over Time (Population)")
-    )
-  })
-}
+
+server <- function(input, output) { }
+
 
 # Run the application 
 shinyApp(ui = ui, server = server)

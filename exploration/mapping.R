@@ -15,7 +15,6 @@ barbados <- barbados |> rename(Parish = name,
 barbados <- barbados |> arrange(ID)
 
 # plotting
-map <- tm_shape(barbados) + 
+bb_tmap <- tm_shape(barbados) + 
   tm_polygons(fill = "Parish", 
               fill.scale = tm_scale(values = paletteer_d("ggsci::category20_d3")[1:11]))
-map
