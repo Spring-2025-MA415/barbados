@@ -172,7 +172,8 @@ ui <- navbarPage(
                     <h2>Health</h2>
                     
                     <p style='font-size: 16px;'>
-                      Discover health information by selecting a dataset and variable to plot over time!
+                      Lots of data on Barbados was collected from the World Health Organization, so limited
+                      graphs are shown below.
                     </p>
                     
                   </div>")
@@ -224,7 +225,7 @@ server <- function(input, output) {
   })
   
   output$tmap <- renderTmap({
-    bb_tmap  # Just render the existing `bb_tmap`
+    bb_tmap
   })
   
   selected_data <- reactive({
@@ -247,7 +248,7 @@ server <- function(input, output) {
             marker = list(color = 'darkblue', size = 5)) %>%
       layout(title = paste("<b>", input$yvar, "from 1950-2100</b>"),
              xaxis = list(title = "<b>Year</b>"),
-             yaxis = list(title = paste0("<b>", input$yvar, "\n(", unit_lookup[[input$yvar]], ")</b>")),
+             yaxis = list(title = paste0("<b>", input$yvar, "\n(", un_unit_lookup[[input$yvar]], ")</b>")),
              margin = list(b = 100)
       )
   })

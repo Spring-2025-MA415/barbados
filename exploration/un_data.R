@@ -132,7 +132,7 @@ migrations <- migrations |> rename("Year" = Time,
 
 
 ####### Adding a unit table ######
-unit_lookup <- list(
+un_unit_lookup <- list(
   "Total Population, as of 1 January" = "thousands",
   "Total Population, as of 1 July" = "thousands",
   "Total Male Population, as of 1 July" = "thousands",

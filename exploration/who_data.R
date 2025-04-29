@@ -230,3 +230,4 @@ women_methods <- read.csv("datasets/Women satisfied with modern methods/dataset.
 women_methods <- women_methods |> select(IND_NAME, DIM_TIME, Sex, RATE_PER_100_N) |>
   rename("Year" = DIM_TIME,
          "%" = RATE_PER_100_N)
+
