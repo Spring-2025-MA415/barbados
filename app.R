@@ -201,15 +201,19 @@ ui <- navbarPage(
              )
            ),
            HTML("
-                <div style='padding: 50px;'>
-                  Based on exploration of the interactive graph above, the top leading cause of death for both males and 
-                females is stroke.
+                <div style='padding: 50px 0px 10px 0px;'>
+                  <p style='margin-bottom: 40px'>
+                    Based on exploration of the interactive graph above, the top leading cause of death for both males and 
+                    females is stroke.
+                  </p>
+                  
+                  <p>Click on the button below to view the data used for the causes of death.</p>
                 </div>
                 "),
            
            # Unified section (button + collapsible box)
            tags$div(
-             style = "margin: 20px 0; border: 1px solid #666; border-radius: 6px; background-color: #e9f2ff; box-shadow: 0 2px 4px rgba(0,0,0,0.1);",
+             style = "margin: 5px 0; border: 1px solid #666; border-radius: 6px; background-color: #e9f2ff; box-shadow: 0 2px 4px rgba(0,0,0,0.1);",
              
              # Button styled to match the section
              actionButton("toggle_table", "▼ Show Data Table",
@@ -357,7 +361,7 @@ server <- function(input, output, session) {
             color = ~Group,
             colors = color_map,
             type = 'bar') %>%
-      layout(title = "<b>Top Causes of Death in Barbados in 2021</b>",
+      layout(title = "<b>Top Causes of Death by Sex in Barbados in 2021</b>",
              xaxis = list(title = "<b>Death Rate (per 100k)</b>"),
              yaxis = list(title = "<b>Cause</b>"),
              barmode = 'group',
