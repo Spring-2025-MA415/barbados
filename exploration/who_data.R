@@ -231,3 +231,33 @@ women_methods <- women_methods |> select(IND_NAME, DIM_TIME, Sex, RATE_PER_100_N
   rename("Year" = DIM_TIME,
          "%" = RATE_PER_100_N)
 
+
+# Top causes of death - Female
+female_deaths <- read.csv("datasets/Top causes of death/female_deaths.csv") 
+female_deaths <- female_deaths |> filter(DIM_COUNTRY_CODE == "BRB") |> arrange(desc(VAL_DTHS_RATE100K_NUMERIC)) |> 
+  rename("Cause" = DIM_GHECAUSE_TITLE,
+         "Sex" = DIM_SEX_CODE,
+         "Rate" = VAL_DTHS_RATE100K_NUMERIC) |> 
+  select(-DIM_COUNTRY_CODE, -DIM_YEAR_CODE)
+top_female_deaths <- female_deaths[1:10,]
+
+# Top causes of death - Male
+male_deaths <- read.csv("datasets/Top causes of death/male_deaths.csv")
+male_deaths <- male_deaths |> filter(DIM_COUNTRY_CODE == "BRB") |> arrange(desc(VAL_DTHS_RATE100K_NUMERIC)) |> 
+  rename("Cause" = DIM_GHECAUSE_TITLE,
+         "Sex" = DIM_SEX_CODE,
+         "Rate" = VAL_DTHS_RATE100K_NUMERIC) |> 
+  select(-DIM_COUNTRY_CODE, -DIM_YEAR_CODE)
+top_male_deaths <- male_deaths[1:10,]
+
+# Top causes of death - Both
+total_deaths <- read.csv("datasets/Top causes of death/both_deaths.csv")
+total_deaths <- total_deaths |> filter(DIM_COUNTRY_CODE == "BRB") |> arrange(desc(VAL_DTHS_RATE100K_NUMERIC)) |> 
+  rename("Cause" = DIM_GHECAUSE_TITLE,
+         "Sex" = DIM_SEX_CODE,
+         "Rate" = VAL_DTHS_RATE100K_NUMERIC) |> 
+  select(-DIM_COUNTRY_CODE, -DIM_YEAR_CODE)
+top_total_deaths <- total_deaths[1:10,]
+
+# Causes of deaths combined
+combined_21 <- rbind(top_female_deaths, top_male_deaths, top_total_deaths)

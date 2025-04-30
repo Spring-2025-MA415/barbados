@@ -2,6 +2,8 @@ library(shiny)
 library(shinydashboard)
 library(leaflet)
 library(plotly)
+library(DT)
+library(shinyjs)
 source("exploration/un_data.R")
 source("exploration/who_data.R")
 source("exploration/mapping.R")
@@ -167,6 +169,7 @@ ui <- navbarPage(
   
   # health tabPanel
   tabPanel("Health",
+           useShinyjs(),
            HTML("
                   <div style='text-align: center;'>
                     <h2>Health</h2>
@@ -176,7 +179,73 @@ ui <- navbarPage(
                       graphs are shown below.
                     </p>
                     
-                  </div>")
+                  </div>"),
+           fluidRow(
+             column(3,
+                    tags$div(style = "height: 30px;"),
+                    div(
+                      style = "border: 1px solid #ccc; padding: 15px; border-radius: 5px; background-color: #f9f9f9;",
+                      h4("Select Categories"),
+                      checkboxGroupInput("health_dataset", 
+                                         label = NULL,  # Remove default label
+                                         choices = list("Female" = "female", "Male" = "male", "Total" = "total"),
+                                         selected = "female", 
+                                         inline = FALSE),
+                      p("Select the causes of death categories to display on the graph."),
+                      p("Hover over each bar to see the value.")
+                    )
+             ),
+             
+             column(9, tags$div(style = "height: 30px;"),
+                    plotlyOutput("healthPlot", height = "600px")
+             )
+           ),
+           HTML("
+                <div style='padding: 50px;'>
+                  Based on exploration of the interactive graph above, the top leading cause of death for both males and 
+                females is stroke.
+                </div>
+                "),
+           
+           # Unified section (button + collapsible box)
+           tags$div(
+             style = "margin: 20px 0; border: 1px solid #666; border-radius: 6px; background-color: #e9f2ff; box-shadow: 0 2px 4px rgba(0,0,0,0.1);",
+             
+             # Button styled to match the section
+             actionButton("toggle_table", "▼ Show Data Table",
+                          class = "btn btn-link btn-lg btn-block",
+                          style = "color: #2E6DA4; font-weight: bold; font-size: 18px; text-align: left; padding: 15px 20px;"),
+             
+             # Collapsible content box
+             tags$div(
+               id = "table_section",
+               style = "display: none; padding: 10px 20px 20px 20px; background-color: #f5f5f5; border-top: 1px solid #444; border-radius: 0 0 6px 6px;",
+               
+               tags$style(HTML("
+                #sex_filter label {
+                  color: black;
+                }
+                #sex_filter .checkbox-inline {
+                  color: black;
+                }
+              ")),
+               
+               checkboxGroupInput(
+                 inputId = "sex_filter",
+                 label = "Filter by Sex:",
+                 choices = c("Female" = "FMLE", "Male" = "MLE", "Total" = "BTSX"),
+                 selected = c("FMLE", "MLE", "BTSX"),
+                 inline = TRUE
+               ),
+               
+               DT::dataTableOutput("dataTable")
+             )
+           )
+           ,
+           
+           HTML("
+                <div style='padding: 10px;'>
+                </div>")
   ),
   
   # citations tabPanel
@@ -216,7 +285,7 @@ ui <- navbarPage(
 )
 
 
-server <- function(input, output) {
+server <- function(input, output, session) {
   output$map <- renderLeaflet({
     leaflet() %>%
       addProviderTiles(providers$CartoDB.Positron) %>%
@@ -251,6 +320,104 @@ server <- function(input, output) {
              yaxis = list(title = paste0("<b>", input$yvar, "\n(", un_unit_lookup[[input$yvar]], ")</b>")),
              margin = list(b = 100)
       )
+  })
+  
+  health_selected_data <- reactive({
+    get(input$health_dataset)
+  })
+  
+  output$health_yvar_ui <- renderUI({
+    data <- health_selected_data()
+    var_choices <- names(data)[names(data) != "Sex"]
+    selectInput("health_yvar", "Choose variable to plot:", choices = var_choices, selected = "Cause")
+  })
+  
+  output$healthPlot <- renderPlotly({
+    selected_health <- input$health_dataset
+    req(selected_health)
+    
+    # Combine datasets based on selection
+    combined <- data.frame()
+    if ("female" %in% selected_health) {
+      combined <- rbind(combined, top_female_deaths |> mutate(Group = "Female"))
+    }
+    if ("male" %in% selected_health) {
+      combined <- rbind(combined, top_male_deaths |> mutate(Group = "Male"))
+    }
+    if ("total" %in% selected_health) {
+      combined <- rbind(combined, top_total_deaths |> mutate(Group = "Total"))
+    }
+    
+    color_map <- c("Female" = "pink", "Male" = "lightblue", "Total" = "lightgreen")
+    
+    # Plot
+    plot_ly(combined, 
+            x = ~reorder(Cause, Rate), 
+            y = ~Rate,
+            color = ~Group,
+            colors = color_map,
+            type = 'bar') %>%
+      layout(title = "<b>Top Causes of Death in Barbados in 2021</b>",
+             xaxis = list(title = "<b>Death Rate (per 100k)</b>"),
+             yaxis = list(title = "<b>Cause</b>"),
+             barmode = 'group',
+             margin = list(b=100)
+             )
+  })
+  
+  observeEvent(input$health_dataset, {
+    if (is.null(input$health_dataset) || length(input$health_dataset) == 0) {
+      showModal(modalDialog(
+        title = "Warning",
+        "You must select at least one dataset. Defaulting to 'female'.",
+        easyClose = TRUE,
+        footer = tagList(
+          modalButton("OK")  # This creates the OK button
+        )
+      ))
+      
+      updateCheckboxGroupInput(
+        session,
+        "health_dataset",
+        selected = "female"
+      )
+    }
+  }, ignoreNULL = FALSE)
+  
+  observeEvent(input$toggle_table, {
+    toggle("table_section")
+  })
+  
+  filtered_data <- reactive({
+    combined <- rbind(female_deaths, male_deaths, total_deaths)
+    
+    req(input$sex_filter)  # Ensure it's not NULL
+    
+    subset(combined, Sex %in% input$sex_filter)
+  })
+  
+  
+  output$dataTable <- renderDT({
+    datatable(filtered_data())
+  })
+  
+  table_visible <- reactiveVal(FALSE)
+  
+  # Toggle table visibility
+  observeEvent(input$toggle_table, {
+    # Toggle visibility of the table
+    table_visible(!table_visible())  # Switch between TRUE/FALSE
+    
+    # Change button text depending on the table visibility
+    if (table_visible()) {
+      updateActionButton(session, "toggle_table", label = "▲ Hide Data Table")
+      # Show the table
+      shinyjs::show("table_section")
+    } else {
+      updateActionButton(session, "toggle_table", label = "▼ Show Data Table")
+      # Hide the table
+      shinyjs::hide("table_section")
+    }
   })
   
 }
