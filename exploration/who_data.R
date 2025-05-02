@@ -261,3 +261,10 @@ top_total_deaths <- total_deaths[1:10,]
 
 # Causes of deaths combined
 combined_21 <- rbind(top_female_deaths, top_male_deaths, top_total_deaths)
+
+
+
+# to explore more death data
+mortality_data <- rbind(homicide, poisoning, pollution, suicide)
+mortality_data$IND_NAME <- tools::toTitleCase(mortality_data$IND_NAME)
+

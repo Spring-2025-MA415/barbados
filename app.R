@@ -42,6 +42,7 @@ ui <- navbarPage(
                     </p>
                   </div>
                    "),
+           tags$div(style = "margin-bottom: 20px; background-color: #fdfdfd; border: 1px solid #ccc; padding-left: 30px; padding-right: 30px; padding-bottom: 10px; border-radius: 6px;",
            fluidRow(
              # Leaflet map
              column(7, tags$div(
@@ -54,7 +55,7 @@ ui <- navbarPage(
                                 tags$h4("Map of Barbados", style = "text-align: center;"),
                                 tmapOutput("tmap", height = "350px"))
                     )
-            ),
+            ),),
   ),
   
   # history tabPanel
@@ -77,7 +78,7 @@ ui <- navbarPage(
                     </p>
                   </div>
                   
-                  <div style='font-size: 16px; text-align: left'>
+                  <div style='font-size: 16px; text-align: left; background-color: #fdfdfd; border: 1px solid #ccc; margin: 20px 0 20px 0; padding-bottom: 20px; padding-left: 30px; padding-right: 30px; border-radius: 6px;'>
                     <h3 style='text-align: center;'>Historical Sites & Museums</h3>
                     <p style='text-align: center;'>
                       There are plenty of places to visit in Barbados to explore its history. This includes both 
@@ -150,6 +151,7 @@ ui <- navbarPage(
                     
                   </div>
                    "),
+           tags$div(style = "margin: 20px 0 20px 0; background-color: #fdfdfd; border: 1px solid #ccc; padding: 30px; border-radius: 6px;",
            fluidRow(
              column(6, selectInput("dataset", "Choose a dataset:",
                                    choices = c("Estimated Population" = "est_population",
@@ -164,47 +166,48 @@ ui <- navbarPage(
              column(6, uiOutput("yvar_ui"))
            ),
            tags$div(style = "height: 30px;"),
-           plotlyOutput("demographicsPlot")
+           plotlyOutput("demographicsPlot"),
+           HTML("
+                <div>
+                    Based on exploration of the interactive graph above, Barbados's population is 
+                    projected to decrease after 2028. This makes sense, as both births and deaths are 
+                    projected to decrease, as well. However, deaths are projected to increase from 2023 to 
+                    2048, most likely due to the introduction of the coronavirus pandemic in 2020. 
+                    It would be interesting to learn why deaths then decrease after 2048.
+                </div>
+                "),
+           ),
   ),
   
   # health tabPanel
-  tabPanel("Health",
+  tabPanel("Mortality Data",
            useShinyjs(),
            HTML("
                   <div style='text-align: center;'>
-                    <h2>Health</h2>
+                    <h2>Mortality Data</h2>
                     
                     <p style='font-size: 16px;'>
-                      Lots of data on Barbados was collected from the World Health Organization, so limited
-                      graphs are shown below.
+                      Lots of data was collected from the World Health Organization, so limited
+                      graphs are shown.
                     </p>
-                    
                   </div>"),
-           fluidRow(
-             column(3,
-                    tags$div(style = "height: 30px;"),
+           tags$div(style = "margin: 20px 0 20px 0; background-color: #fdfdfd; border: 1px solid #ccc; border-radius: 6px;",
+           tags$div(style = "text-align: center", h3("Top Causes of Death")),
+           tags$div(style = "padding-left: 30px; padding-right: 30px;",
                     div(
-                      style = "border: 1px solid #ccc; padding: 15px; border-radius: 5px; background-color: #f9f9f9;",
-                      h4("Select Categories"),
-                      checkboxGroupInput("health_dataset", 
-                                         label = NULL,  # Remove default label
+                      checkboxGroupInput("health_dataset", "Select Sex:",
                                          choices = list("Female" = "female", "Male" = "male", "Total" = "total"),
-                                         selected = "female", 
-                                         inline = FALSE),
-                      p("Select the causes of death categories to display on the graph."),
-                      p("Hover over each bar to see the value.")
-                    )
-             ),
-             
-             column(9, tags$div(style = "height: 30px;"),
-                    plotlyOutput("healthPlot", height = "600px")
-             )
-           ),
+                                         selected = "female",
+                                         inline = TRUE),
+                      ),
+                    plotlyOutput("healthPlot", height = "600px"),
            HTML("
                 <div style='padding: 50px 0px 10px 0px;'>
                   <p style='margin-bottom: 40px'>
                     Based on exploration of the interactive graph above, the top leading cause of death for both males and 
-                    females is stroke.
+                    females is stroke. You can also see that the main causes of death for both sexes 
+                    are just about the same, with the exceptions of breast cancer, skin diseases, and hypertensive heart diseases 
+                    for females, and prostate cancer, HIV/AIDS, and interpersonal violence for males.
                   </p>
                   
                   <p>Click on the button below to view the data used for the causes of death.</p>
@@ -213,7 +216,7 @@ ui <- navbarPage(
            
            # Unified section (button + collapsible box)
            tags$div(
-             style = "margin: 5px 0; border: 1px solid #666; border-radius: 6px; background-color: #e9f2ff; box-shadow: 0 2px 4px rgba(0,0,0,0.1);",
+             style = "margin: 5px 0; border: 1px solid #666; border-radius: 6px; background-color: #e9f2ff; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 30px",
              
              # Button styled to match the section
              actionButton("toggle_table", "▼ Show Data Table",
@@ -244,46 +247,79 @@ ui <- navbarPage(
                
                DT::dataTableOutput("dataTable")
              )
-           )
-           ,
+           ),),),
+           
+           tags$div(style = "margin-top: 0px; background-color: #fdfdfd; border: 1px solid #ccc; border-radius: 6px;",
+                    h3("Mortality Trends Over Time", style = "text-align: center;"),
+                    tags$div(style = "padding-left: 30px; padding-right: 30px;",
+                    fluidRow(
+                      column(6,
+                             selectInput(
+                               inputId = "cause_select",
+                               label = "Select Cause of Death:",
+                               choices = unique(mortality_data$IND_NAME),
+                               selected = unique(mortality_data$IND_NAME)[1],
+                               multiple = FALSE  # Ensures only one cause can be selected
+                             ),
+                      ),
+                      column(6,
+                             checkboxGroupInput("sex_select", "Select Sex:", 
+                                                choices = c("Female", "Male"),  # Default choices
+                                                selected = "Female") ,
+                      )
+                    ),
+                    plotlyOutput("linePlot", height = "500px"),
+                    tags$div(style = "height: 30px;")
+           ),
            
            HTML("
                 <div style='padding: 10px;'>
                 </div>")
+           ),
+           tags$div(style = "height: 30px;"),
   ),
   
   # citations tabPanel
   tabPanel("Citations",
            HTML("
-                  <div style='text-align: center;'>
-                    <h2>Citations</h2>
-                  </div>
+                <div style='text-align: center;'>
+                  <h2>Citations</h2>
+                </div>
                   
-                  <ul>
-                    <li><a href='https://population.un.org/wpp/downloads?folder=Standard%20Projections&group=CSV%20format' target='_blank'>United Nations: Barbados Demographics Data</a> </li>
-                    <li><a href='https://data.who.int/countries/052' target='_blank'>World Health Organization: Barbados Health Information</a></li>
+                <div style='padding-left: 20px; padding-right: 20px;'>
+                <div style='column-count: 2; column-gap: 40px; padding: 20px; background-color: #fdfdfd; border: 1px solid #ccc; border-radius: 6px;'>
+                  <ul style='list-style-position: inside; padding-left: 0;'>
+                    <li><a href='https://population.un.org/wpp/downloads?folder=Standard%20Projections&group=CSV%20format' target='_blank'>United Nations: Barbados Demographics Data</a></li>
+                    <li><a href='https://data.who.int/countries/052' target='_blank'>World Health Organization: Barbados Health Information</a>
                       <ul>
                         <li><a href='https://data.who.int/indicators' target='_blank'>Definitions of Health Indicators</a></li>
                       </ul>
+                    </li>
                     <li><a href='https://simplemaps.com/gis/country/bb' target='_blank'>Simple Maps: Barbados Shapefile</a></li>
-                    <li><a href='https://shiny.posit.co/r/getstarted/shiny-basics/lesson1/' target='_blank'>Shiny</a></li>
+                    <li><a href='https://shiny.posit.co/r/getstarted/shiny-basics/lesson1/' target='_blank'>Shiny</a>
                       <ul>
                         <li><a href='https://shiny.posit.co/r/reference/shiny/1.7.1/navbarpage.html' target='_blank'>NavBar Usage</a></li>
                       </ul>
-                    <li><a href='https://rstudio.github.io/leaflet/index.html' target='_blank'>Leaflet</a></li>
+                    </li>
+                    <li><a href='https://rstudio.github.io/leaflet/index.html' target='_blank'>Leaflet</a>
                       <ul>
                         <li><a href='https://rstudio.github.io/leaflet/articles/popups.html' target='_blank'>Popups and Labels</a></li>
                       </ul>
-                    <li><a href='https://www.visitbarbados.org/things-to-do/experiences/history-culture?pageindex=1' target='_blank'>Visit Barbados</a></li>
+                    </li>
+                    <li><a href='https://www.visitbarbados.org/things-to-do/experiences/history-culture?pageindex=1' target='_blank'>Visit Barbados</a>
                       <ul>
                         <li><a href='https://www.visitbarbados.org/top-seven-historical-sites-to-visit-in-barbados' target='_blank'>Historical Sites</a></li>
                         <li><a href='https://www.visitbarbados.org/-four-of-the-islands-most-unique-museums' target='_blank'>Museums</a></li>
                       </ul>
+                    </li>
+                    <li><a href='https://www.chatgpt.com' target='_blank'>ChatGPT</a></li>
                   </ul>
-                  
-                  <div style='margin: 0; padding: 10px;'>
-                    <img src='barbados_trees.webp' alt='Barbados Palm Trees' style='width: 100%; height: auto; display: block; border-radius: 10px;' />
-                  </div>
+                </div>
+  
+                <div style='margin-top: 20px; margin-bottom: 20px;'>
+                  <img src='barbados_trees.webp' alt='Barbados Palm Trees' style='width: 100%; height: auto; display: block; border-radius: 10px;' />
+                </div>
+              </div>
                    ")
   )
 )
@@ -421,6 +457,100 @@ server <- function(input, output, session) {
       updateActionButton(session, "toggle_table", label = "▼ Show Data Table")
       # Hide the table
       shinyjs::hide("table_section")
+    }
+  })
+  
+  output$linePlot <- renderPlotly({
+    req(input$cause_select, input$sex_select)
+    
+    # Filter the dataset based on input
+    df <- mortality_data %>%
+      filter(IND_NAME == input$cause_select, Sex %in% input$sex_select) %>%
+      mutate(
+        Year = as.numeric(as.character(Year)),
+        Rate = as.numeric(`Rate per 100,000 population`),
+        Lower = as.numeric(`Rate per 100,000 population (Lower Bound)`),
+        Upper = as.numeric(`Rate per 100,000 population (Upper Bound)`)
+      )
+    
+    # Validate data presence
+    validate(
+      need(nrow(df) > 0, "No data available for this cause and sex selection.")
+    )
+    
+    color_map <- c("Female" = "hotpink", "Male" = "blue", "Total" = "green")
+    
+    # Generate interactive plot
+    plot_ly(df, x = ~Year, y = ~Rate, color = ~Sex,
+            type = "scatter", mode = "lines+markers",
+            text = ~paste("Year:", Year,
+                          "<br>Sex:", Sex,
+                          "<br>Rate:", round(Rate, 1)),
+            hoverinfo = "text",
+            colors = color_map) %>%
+      add_ribbons(x = ~Year,
+                  ymin = ~Lower,
+                  ymax = ~Upper,
+                  color = ~Sex,
+                  showlegend = FALSE,
+                  line = list(color = "transparent"),
+                  opacity = 0.2) %>%
+      layout(
+        title = paste("<b>Trend of", input$cause_select, "Over Time</b>"),
+        xaxis = list(title = "<b>Year</b>"),
+        yaxis = list(title = "<b>Rate per 100,000</b>"),
+        legend = list(title = list(text = "<b>Sex</b>"))
+      )
+  })
+  
+  observe({
+    updateSelectInput(session, "cause_select",
+                      choices = unique(mortality_data$IND_NAME),
+                      selected = unique(mortality_data$IND_NAME)[1])
+  })
+  
+  observeEvent(input$sex_select, {
+    if (is.null(input$sex_select) || length(input$sex_select) == 0) {
+      showModal(modalDialog(
+        title = "Warning",
+        "You must select at least one sex. Defaulting to 'Female'.",
+        easyClose = TRUE,
+        footer = tagList(
+          modalButton("OK")  # This creates the OK button
+        )
+      ))
+      
+      updateCheckboxGroupInput(
+        session,
+        "sex_select",
+        selected = "Female"
+      )
+    }
+  }, ignoreNULL = FALSE)
+  
+  observe({
+    # Filter the data for the selected cause of death (IND_NAME)
+    selected_data <- mortality_data %>%
+      filter(IND_NAME == input$cause_select)
+    
+    # Check if "Total" exists in the 'Sex' column for the selected IND_NAME
+    total_data_exists <- any(selected_data$Sex == "Total")
+    
+    # Dynamically update the checkboxes based on the existence of "Total"
+    if (total_data_exists) {
+      updateCheckboxGroupInput(
+        session,
+        "sex_select",
+        choices = c("Female", "Male", "Total"),  # Show "Total" if it exists
+        selected = "Female"  # Default to "Female" if available
+      )
+    } else {
+      updateCheckboxGroupInput(
+        session,
+        "sex_select",
+        choices = c("Female", "Male"),  # Only show "Female" and "Male"
+        selected = "Female"  # Default to "Female" if "Total" doesn't exist
+      )
     }
   })
   
